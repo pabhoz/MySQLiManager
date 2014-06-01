@@ -51,7 +51,6 @@ class MySQLiManager{
 	function select($attr,$table,$where = ''){
 
 		$where = ($where != '' ||  $where != null) ? "WHERE ".$where : '';
-
 		$stmt = "SELECT ".$attr." FROM ".$table." ".$where.";";
 		$result = $this->link->query($stmt) or die($this->link->error.__LINE__);
 		if($result->num_rows > 0) {
@@ -80,7 +79,10 @@ class MySQLiManager{
 	* @return Boolean $response true/false
 	*/
 	function insert($table,$values,$where = '',$sanear = false){
-
+                
+                $columnas = null;
+                $valores = null;
+            
 		foreach ($values as $key => $value) {
 			$columnas.=$key.',';
 			if( $sanear == true){
@@ -93,8 +95,11 @@ class MySQLiManager{
 		$valores = substr($valores, 0, -1);
 
 		$stmt = "INSERT INTO ".$table." (".$columnas.") VALUES(".$valores.") ".$where.";";
-		$result = $this->link->query($stmt) or die($this->link->error.__LINE__);
-		if($result->num_rows > 0) {
+		
+                //$result = $this->link->query($stmt) or die($this->link->error.__LINE__);
+                $result = $this->link->query($stmt) or die($this->link->error);
+		
+                if($result > 0) {
 			$response = false;
 		}
 		else {
